@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+
+
+{% block content %}
+	
+  <br>
+
+<!--Search Bar-->
+  <h2 class="header">Scrape a new Website</h2>
+  <nav>
+    <div class="nav-wrapper">
+      <form method="GET" action={% url 'scrape'%}>
+        <div class="input-field">
+          <input placeholder="Enter Url to Scrape" id="search" type="search" required name="scrapeUrl">
+          <label for="search"><i class="material-icons">search</i></label>
+          <i class="material-icons">close</i>
+        </div>
+      </form>
+    </div>
+  </nav>
+
+  <br><br>
+
+<!--Search Stored Website Data-->
+  <h2 class="header">Search from Saved Websites</h2>
+  <nav>
+    <div class="nav-wrapper">
+      <form method="GET" action={% url 'search_db'%}>
+        <div class="input-field">
+          <input placeholder="Enter website name" id="search" type="search" required name="searchtext">
+          <label for="search"><i class="material-icons">search</i></label>
+          <i class="material-icons">close</i>
+        </div>
+      </form>
+    </div>
+  </nav>
+
+  <br><br>
+
+<!--Displaying Stored Website data-->
+{% if websites %}
+  <div class="row">
+  	<h2 class="header">Saved Websites</h2>
+  	{% for website in websites.object_list reversed %}
+	    <div class="col s4  card horizontal ">
+	      <div class="card-image">
+	        <img src="//logo.clearbit.com/{{website.scrapeUrl_link}}">
+	      </div>
+	      <div class="card-stacked" style="overflow: hidden; word-wrap: break-word;">
+	        <div class="card-content">
+	          <div><p>{{website.scrapeUrl_link}}</p></div>
+	        </div>
+	        <div class="card-action">
+	          <a href="{% url 'view_website' website.id %}">See Scrap Data</a>
+	        </div>
+	      </div>
+	    </div>
+    {% endfor %}
+  </div>
+{% endif %}
+
+<div class="row">
+    <ul class="pagination">
+		{% if websites.has_previous %}
+		  <li class="waves-effect"><a href="?page={{ websites.previous_page_number }}"><i class="material-icons">chevron_left</i></a></li>
+		{% else %}
+		  <li class="disabled"><a href="#!"><i class="material-icons">chevron_left</i></a></li>
+		{% endif %}
+
+		{% for pg in websites.paginator.page_range %}
+		  {% if websites.number == pg %}
+		      <li class="active"><a href="?page={{ pg }}">{{ pg }}</a></li>
+		  {% else %}
+		      <li class="waves-effect"><a href="?page={{ pg }}">{{ pg }}</a></li>
+		  {% endif %}
+		{% endfor %}
+
+		{% if websites.has_next %}
+		  <li class="waves-effect"><a href="?page={{ websites.next_page_number }}"><i class="material-icons">chevron_right</i></a></li>
+		{% else %}
+		  <li class="disabled"><a href="#!"><i class="material-icons">chevron_right</i></a></li>
+		{% endif %}
+    </ul>
+</div>
+
+<br><br>
+
+{% endblock content %}

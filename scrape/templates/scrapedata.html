@@ -1,0 +1,112 @@
+{% extends "base.html" %}
+
+
+{% block content %}
+
+  <br><br>
+{% if image_info %}
+<!--Meta Information-->
+  <ul class="collapsible" data-collapsible="accordion">
+	<li>
+	  <div class="collapsible-header"><i class="material-icons">filter_drama</i>Head tag Info</div>
+	  <div class="collapsible-body"><p>{{head_data}}</p></div>
+	</li>
+	<li>
+	  <div class="collapsible-header"><i class="material-icons">filter_drama</i>Time taken to Scrape</div>
+	  <div class="collapsible-body"><p>{{total_time}} seconds</p></div>
+	</li>
+  </ul>
+
+  <br><br>
+
+
+<!--Image Module-->
+  <div class="row">
+  	{% for info in image_info reversed %}
+		<div class="col s4">
+			<div class="card small">
+				<div class="card-image waves-effect waves-block waves-light">
+				  <a href="{{info.url}}"><img class="activator" src="{{info.url}}"></a>
+				</div>
+
+				<div class="card-action">
+      			  <p>Height - {{info.width}}</p>
+				  <p>width - {{info.width}}</p>
+    			</div>
+				
+			</div>
+		</div>
+	{% endfor %}
+  </div>
+
+{%elif scrape_data%}
+
+
+
+<!--Meta Information-->
+  <ul class="collapsible" data-collapsible="accordion">
+	<li>
+	  <div class="collapsible-header"><i class="material-icons">filter_drama</i>Head tag Info</div>
+	  <div class="collapsible-body"><p>{{website_link.head_data}}</p></div>
+	</li>
+	<li>
+	  <div class="collapsible-header"><i class="material-icons">filter_drama</i>Time taken to Scrape</div>
+	  <div class="collapsible-body"><p>{{website_link.scrape_time}} seconds</p></div>
+	</li>
+  </ul>
+
+  <br><br>
+
+
+<!--Image Module-->
+  <div class="row">
+  	{% for data in scrape_data.object_list %}
+		<div class="col s4">
+			<div class="card small">
+				<div class="card-image waves-effect waves-block waves-light">
+				  <a href="{{data.image_link}}"><img class="activator" src="{{data.image_link}}"></a>
+				</div>
+
+				<div class="card-action">
+      			  <p>Height - {{data.image_width}}</p>
+				  <p>width - {{data.image_height}}</p>
+    			</div>
+				
+			</div>
+		</div>
+	{% endfor %}
+  </div>
+
+
+<div class="row">
+    <ul class="pagination">
+		{% if scrape_data.has_previous %}
+		  <li class="waves-effect"><a href="?page={{ scrape_data.previous_page_number }}"><i class="material-icons">chevron_left</i></a></li>
+		{% else %}
+		  <li class="disabled"><a href="#!"><i class="material-icons">chevron_left</i></a></li>
+		{% endif %}
+
+		{% for pg in scrape_data.paginator.page_range %}
+		  {% if scrape_data.number == pg %}
+		      <li class="active"><a href="?page={{ pg }}">{{ pg }}</a></li>
+		  {% else %}
+		      <li class="waves-effect"><a href="?page={{ pg }}">{{ pg }}</a></li>
+		  {% endif %}
+		{% endfor %}
+
+		{% if scrape_data.has_next %}
+		  <li class="waves-effect"><a href="?page={{ scrape_data.next_page_number }}"><i class="material-icons">chevron_right</i></a></li>
+		{% else %}
+		  <li class="disabled"><a href="#!"><i class="material-icons">chevron_right</i></a></li>
+		{% endif %}
+    </ul>
+</div>
+
+<br><br>
+
+
+
+{%else%}
+	<p>None to show</p>
+{%endif%}
+{% endblock content %}

@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+
+{% block content %}
+  <br>
+
+  <nav>
+    <div class="nav-wrapper">
+      <div class="col s12">
+        <a href="#!" class="breadcrumb">&nbsp;&nbsp;results</a>
+        <a href="#!" class="breadcrumb">{{websites.count}}</a>
+      </div>
+    </div>
+  </nav>
+
+  {% if websites %}
+    <div class="row">
+      <h2 class="header">Saved Websites</h2>
+      {% for website in websites %}
+        <div class="col s4  card horizontal ">
+          <div class="card-image">
+            <img src="//logo.clearbit.com/{{website.scrapeUrl_link}}">
+          </div>
+          <div class="card-stacked" style="overflow: hidden; word-wrap: break-word;">
+            <div class="card-content">
+              <div><p>{{website.scrapeUrl_link}}</p></div>
+            </div>
+            <div class="card-action">
+              <a href="{% url 'view_website' website.id %}">See Scrap Data</a>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+  {% endif %}
+
+
+{% endblock content %}
